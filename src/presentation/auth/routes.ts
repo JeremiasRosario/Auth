@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { AuthController } from './controller';
+import { AuthServices } from '../services/auth.services';
 
 
 
@@ -9,8 +10,8 @@ export class AuthRoutes {
     static get routes(): Router {
 
         const router = Router();
-
-        const controller = new AuthController();
+        const authServices = new AuthServices();
+        const controller = new AuthController(authServices);
 
         // Definir las rutas
         router.post('/login', controller.loginUser);
