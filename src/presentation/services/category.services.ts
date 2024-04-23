@@ -42,4 +42,24 @@ export class CaterogyServices {
 
     }
 
+    async getCategories() {
+
+        try {
+
+            const categories = await CategoryModel.find();
+
+            return categories.map(category => ({
+                id: category.id,
+                name: category.name,
+                available: category.avaliable,
+            }))
+
+
+        } catch (error) {
+            throw CustomError.internalServer(`${error}`)
+        }
+
+
+    }
+
 }
