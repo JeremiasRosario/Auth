@@ -1,5 +1,8 @@
-import { CreateCategoryDto } from "../../domain";
+import { create } from "domain";
+import { CategoryModel } from "../../data";
+import { CreateCategoryDto, CustomError } from "../../domain";
 import { UserEntity } from '../../domain/entities/user.entity';
+import { CategoryRoutes } from "../category/routes";
 
 
 export class CaterogyServices {
@@ -7,10 +10,35 @@ export class CaterogyServices {
 
     constructor() { }
 
-    async createCategory(createCategorydto: CreateCategoryDto, UserEntity:) {
+    async createCategory(createCategoryDto: CreateCategoryDto, user: UserEntity) {
 
 
-        const
+        const categoryExist = await CategoryModel.findOne({ name: createCategoryDto.name });
+        if (categoryExist) throw CustomError.badRequest('Categpry already exist');
+
+        try {
+
+            const category = new CategoryModel({
+                ...createCategoryDto,
+                user: user.id,
+            })
+
+
+            await category.save();
+
+            return {
+                id: category.id,
+                name: category.name,
+                available: category.avaliable,
+
+            }
+
+
+
+        } catch (error) {
+            throw CustomError.internalServer(`${error}`);
+
+        }
 
     }
 
