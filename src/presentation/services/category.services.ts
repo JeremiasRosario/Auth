@@ -1,8 +1,10 @@
 import { create } from "domain";
 import { CategoryModel } from "../../data";
-import { CreateCategoryDto, CustomError } from "../../domain";
+import { CreateCategoryDto, CustomError, PaginationDto } from "../../domain";
 import { UserEntity } from '../../domain/entities/user.entity';
 import { CategoryRoutes } from "../category/routes";
+
+
 
 
 export class CaterogyServices {
@@ -42,11 +44,16 @@ export class CaterogyServices {
 
     }
 
-    async getCategories() {
+    async getCategories(paginationDto: PaginationDto) {
+
+        const { page, limit } = paginationDto
+
 
         try {
 
-            const categories = await CategoryModel.find();
+            const categories = await CategoryModel.find()
+                .skip((page - 1) * limit)
+                .limit(limit)
 
             return categories.map(category => ({
                 id: category.id,
