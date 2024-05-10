@@ -44,8 +44,7 @@ export class ProductController {
         const { page = 1, limit = 10 } = req.query;
         const [error, paginationDto] = PaginationDto.create(+page, +limit)
         if (error) return res.status(400).json({ error });
-        res.json(paginationDto)
-
+        // res.json(paginationDto)
         return res.json('get product');
 
 
